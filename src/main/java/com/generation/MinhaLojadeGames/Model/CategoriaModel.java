@@ -23,7 +23,7 @@ public class CategoriaModel {
 	private Long id;
 
 	@NotBlank
-	@Size(min = 10, max = 100)
+	//@Size(min = 10, max = 100)
 	@OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
 	@JsonIgnoreProperties("categoria")
 	private List<ProdutoModel> produto;
