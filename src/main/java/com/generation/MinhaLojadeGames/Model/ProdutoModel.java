@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -26,8 +27,7 @@ public class ProdutoModel {
 	@Size(min = 10, max = 100)
 	private String nome;
 
-	@NotBlank
-	@Digits(integer = 6, fraction = 2)
+	@DecimalMax(value = "9999999999.999", message = "Valor deve ser menor que 9999999999.999")
 	private BigDecimal preco;
 
 	@ManyToOne
