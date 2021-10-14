@@ -20,6 +20,9 @@ public class BasicSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userdetailsService);
+		
+		auth.inMemoryAuthentication()
+		.withUser("gamer").password(passwordEncoder().encode("gamer")).authorities("RLO_ADMIN");
 	}
 
 	@Bean
@@ -33,4 +36,7 @@ public class BasicSecurityConfig extends WebSecurityConfigurerAdapter {
 				.anyRequest().authenticated().and().httpBasic().and().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().cors().and().csrf().disable();
 	}
+
+
+		
 }
