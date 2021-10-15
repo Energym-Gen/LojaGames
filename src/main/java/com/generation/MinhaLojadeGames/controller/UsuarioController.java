@@ -36,14 +36,18 @@ public class UsuarioController {
 	private UsuarioRepository repository;
 
 	@PostMapping("/logar")
-	public ResponseEntity<UserLogin> Autentication(@RequestBody Optional<UserLogin> user) {
+	public ResponseEntity<UserLogin> Autentication(@Valid @RequestBody Optional<UserLogin> user) {
 		return usuarioService.logar(user).map(resp -> ResponseEntity.ok(resp))
 				.orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
 	}
 
 	@PostMapping("/cadastrar")
-	public ResponseEntity<Usuario> Post(@RequestBody Usuario usuario) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.cadastrarUsuario(usuario));
+	public ResponseEntity<Object> cadastrar(@Valid @RequestBody Usuario usuario) {
+		return usuarioService.cadastrarUsuario(usuario)
+				.map(usuarioExistente -> ResponseEntity.status(201).body(usuarioExistente)).orElseThrow(() -> {
+					throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+							"Usuario existente, cadastre outro usuario!.");
+				});
 	}
 
 	@GetMapping
@@ -67,8 +71,12 @@ public class UsuarioController {
 	}
 
 	@PutMapping("/atualizar")
-	public ResponseEntity<Usuario> atualizar(@Valid @RequestBody Usuario novoUsuario) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.cadastrarUsuario(novoUsuario));
+	public ResponseEntity<Usuario> atualizar(@Valid @RequestBody Usuario usuario) {
+		return usuarioService.atualizarUsuario(usuario)
+				.map(usuarioExistente -> ResponseEntity.status(201).body(usuarioExistente)).orElseThrow(() -> {
+					throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+							"Necessario que passe um Usuario válido para alterar!.");
+				});
 	}
 
 	@DeleteMapping("/deletar/{id_usuario}")
